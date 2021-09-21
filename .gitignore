@@ -2,7 +2,7 @@
 
 # dependencies
 /userAPI/node_modules
-/cryptoprices/node_modules
+/node_modules
 /.pnp
 .pnp.js
 
