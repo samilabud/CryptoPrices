@@ -18,6 +18,7 @@
   "dependencies": {
     "@material-ui/core": "^4.12.3",
     "concurrently": "^6.2.1",
+    "express": "^4.17.1",
     "knex": "^0.95.11",
     "nodemon": "^2.0.12",
     "pg": "^8.7.1"
