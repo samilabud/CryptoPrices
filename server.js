@@ -6,16 +6,33 @@ const knex = require('knex');
 const register = require('./controllers/register');
 const signin = require('./controllers/signin');
 const profile = require('./controllers/profile');
+const config = require('./constants/config')
 
-const db = knex({
-    client: 'pg',
-    connection: {
-      host : 'localhost',
-      user : 'postgres',
-      password : '123456',
-      database : 'samcryptodb'
-    }
-});  
+let db = "";
+
+
+if(process.env.NODE_ENV !== "production"){
+    const {host,user,password,database} = config.enviroments.development;
+    db= knex({
+        client: 'pg',
+        connection: {
+          host : host,
+          user : user,
+          password : password,
+          database : database
+        }
+    });
+}else{
+    db = knex({
+        client:'pg',
+        connection: {
+            connectionString:process.env.DATABASE_URL,
+            ssl:{
+                rejectUnauthorized: false
+            }
+        }
+    })
+}
 
 const app = express();
 
