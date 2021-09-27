@@ -54,20 +54,6 @@ export const Sellprices = () =>{
             console.log("Error not handled");
           });
           
-          /*await client.getSellPrice({'currencyPair': data.id +'-USD'}, async function(err, price) {
-            let innerArrayDataResult = [];
-            try{
-              if(err!=="NotFound: Invalid base currency")
-                innerArrayDataResult ={currencyID:data.id, currencyName:data.name, sellPrice:price.data.amount};//
-              else{
-                innerArrayDataResult = {currencyID:data.id, currencyName:data.name, sellPrice:"Not Found"};
-              }
-            }catch(err){
-              console.log(err,"Error not handled");
-            }
-            arrayDataResult.push(innerArrayDataResult);
-          });*/
-          
         }))
           
        return arrayDataResult;

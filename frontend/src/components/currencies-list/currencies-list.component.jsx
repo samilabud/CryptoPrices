@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react';
 import GridLayout from 'react-grid-layout';
-import '../../gridcss/grid-layout.css';
-import '../../gridcss/resizable.css';
+import './gridcss/grid-layout.css';
+import './gridcss/resizable.css';
 import './currencies-list.styles.css';
 
 export const CurrenciesList = () => {

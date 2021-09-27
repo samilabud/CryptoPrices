@@ -1,4 +1,4 @@
-import React,{useState, useEffect, useMemo} from 'react';
+import React,{useState, useEffect} from 'react';
 import env from "react-dotenv";
 
 import './login.styles.css';
@@ -7,7 +7,16 @@ export const Login = () =>{
   const [classContainerName,setClassContainerName] = useState("containerlogin");
   const [loginError, setLoginError] = useState("");
   const [signUpError, setSignUpError] = useState("");
+  const [userProfile, setUserProfile] = useState(()=>{
+        const savedProfile = localStorage.getItem('user');
+        const initialValue = savedProfile;
+        return  initialValue || JSON.stringify({name:"",email:""});
+      }
+    );
 
+  useEffect(()=>{
+    localStorage.setItem("user",userProfile);
+  }, [userProfile])
 
   //Login uncontrolled
   const inputEmail = React.createRef();
@@ -27,13 +36,19 @@ export const Login = () =>{
     event.preventDefault();
     setClassContainerName("containerlogin");
   };
+
+  let API_URL = "/";
+  if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+      API_URL = env.API_URL; //dev
+  }
+
   //Auth
   const signUpButton = (event) =>{
     event.preventDefault();
-    //console.log(`Trying to signUp with Name:${signUpInputName.current.value} Email: ${signUpInputEmail.current.value} and Password: ${signUpPassword.current.value}`);
-    
+ 
     try{
-      fetch(env.API_URL+"register",{
+      
+      fetch(API_URL+"register",{
         method:'post',
         headers: {'Content-Type': 'application/json'},
         body:JSON.stringify({
@@ -44,9 +59,13 @@ export const Login = () =>{
       })
       .then(data=>data.json())
       .then(data=>{
-        if(data.id)
+        if(data.id){
           setSignUpError("User register successful")
-        else
+          setUserProfile(JSON.stringify({
+            name:data.name,
+            email:data.email
+          }));
+        }else
           setSignUpError("User register unsuccessful")
       })
       .catch((error)=>{
@@ -59,8 +78,7 @@ export const Login = () =>{
 
   const signInButton = (event) => {
     event.preventDefault();
-    //console.log(`Trying to login with Email: ${inputEmail.current.value} and Password: ${inputPassword.current.value}`);
-    fetch(env.API_URL+"signin",{
+    fetch(API_URL+"signin",{
       method:"post",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({
@@ -72,6 +90,11 @@ export const Login = () =>{
     .then(userdata=>{
       if(userdata.id){
         setLoginError("User login successful");
+        
+        Promise.resolve(getUserProfile(userdata.id))
+        .then(userData=>{
+          setUserProfile(JSON.stringify(userData));
+        })
       }else
         setLoginError("User or password are wrong");
     })
@@ -81,18 +104,40 @@ export const Login = () =>{
   };
 
   
-  useEffect(()=>{
-    /*try{
-      fetch("http://localhost:8000")
-      .then(data=>data.json())
-      .then(data=>console.log(data))
+  const getUserProfile = async (id) => {
+    try{
+      let userData = await fetch(API_URL+"profile/"+id);
+      userData = await userData.json();
+      return {name:userData.name,email:userData.email};
     }catch(error){
-      console.log("Error buscando el usuario en UserAPI.", error)
-    }*/
-  },[])
+      console.log("Error trying to get user profile",error);
+      return {name:"",email:""}
+    }
+  }
+
+  const logoutUser = () => {
+    localStorage.removeItem("user");
+    setUserProfile(JSON.stringify({name:"",email:""}));
+  }
+
+
   return (
     <div className="bodycontainer">
-      <div className={classContainerName} id="container" >
+      {JSON.parse(userProfile).name?
+      <div className="profileContainer">
+        <h5>Welcome</h5>
+        <div>
+          <span><strong>Name:</strong> {JSON.parse(userProfile).name}</span>
+        </div>
+        <div>
+          <span><strong>Email:</strong> {JSON.parse(userProfile).email}</span>
+        </div>
+        <div>
+          <span><button onClick={logoutUser}>Logout</button> </span>
+        </div>
+      </div>
+      :
+        <div className={classContainerName} id="container" >
         <div className="form-container sign-up-container">
           <form action="#">
             <h1>Create Account</h1>
@@ -129,8 +174,7 @@ export const Login = () =>{
           </div>
         </div>
       </div>
-      <div>
-      </div>
+      } 
     </div>
   )
 }
