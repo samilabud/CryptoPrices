@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const cors = require('cors');
 const knex = require('knex');
+const path = require('path');
 //local modules
 const register = require('./controllers/register');
 const signin = require('./controllers/signin');
