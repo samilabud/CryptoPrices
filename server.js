@@ -41,7 +41,7 @@ app.use(express.urlencoded({extended:false}));
 app.use(express.json({extended:false}));
 app.use(cors());
 
-app.get("/",(req,res)=>{
+/*app.get("/",(req,res)=>{
    
     db.select("*").from("users")
     .returning("*")
@@ -54,7 +54,7 @@ app.get("/",(req,res)=>{
     .catch(err=>{res.json("Error buscando usuarios." + err)})
    
    
-})
+})*/
 
 //login
 app.post("/signin", signin.handleSignin(db, bcrypt));  //With advance function method
