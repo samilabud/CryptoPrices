@@ -99,12 +99,23 @@
 #currencyList {
   display: grid;
   overflow: auto;
-  height: 200px;
+  height: 400px;
   grid-auto-flow: column;
-  border: #e7e7e7 1px solid;
+  border: #000000 1px solid;
   background-color: aliceblue;
+  padding-top: 10px;
 }
-
+#currencyList::-webkit-scrollbar{
+  width: 15px;
+}
+#currencyList::-webkit-scrollbar-track{
+  background: #EFDECD;
+  border-radius: 50px;
+}
+#currencyList::-webkit-scrollbar-thumb{
+  background: #ffffff;
+  border-radius: 50px;
+}
 
 .currencies-section {
   height: 100%;

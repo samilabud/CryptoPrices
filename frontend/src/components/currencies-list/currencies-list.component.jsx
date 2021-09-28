@@ -34,19 +34,21 @@ export const CurrenciesList = () => {
   }
   
   return (
-      <div id="currencyList">
+    <div>
       <div className="searchCurrency">
         <label htmlFor="inputCurrencies">Filter by currency: </label>
         <input className="inputSearch" type="text" value={searchedCurrency} id="inputCurrencies" onChange={onChangeSearchHandler}></input>
       </div>
-      <GridLayout className="layout" cols={1} rowHeight={15} width={300}>
-        {currencies.map(data=>(
-          <div key={data.id} data-grid={{x: 0, y: 0, w: 1, h: 2}}>
-            {data.name + ' - ' + data.id + ' ' + data.details.symbol}
-          </div>
-        ))}
-      </GridLayout>
+      <div id="currencyList">
+        <GridLayout className="layout" cols={1} rowHeight={15} width={300}>
+          {currencies.map(data=>(
+            <div key={data.id} data-grid={{x: 0, y: 0, w: 1, h: 2}}>
+              {data.name + ' - ' + data.id + ' ' + data.details.symbol}
+            </div>
+          ))}
+        </GridLayout>
       </div>
+    </div>
   )
 }
 export default React.memo(CurrenciesList);
