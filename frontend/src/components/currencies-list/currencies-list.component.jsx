@@ -34,7 +34,7 @@ export const CurrenciesList = () => {
   }
 
   const generateRows = () => {
-    let xPos = 0;
+    let xPos = -1;
     let yPos = 0;
     return currencies.map(data=>{
       if(xPos>=3){
